@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIETARION - Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1a3e 50%, #0f0f2e 100%);
+            background-image: url('https://i.ibb.co/rK0DcQSx/IMG-20251128-194741.jpg');
+            background-size: cover;
+            background-attachment: fixed;
+            background-blend-mode: overlay;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(10, 14, 39, 0.7) 0%, rgba(26, 26, 62, 0.7) 50%, rgba(15, 15, 46, 0.7) 100%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Header & Navigation */
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 30px;
+            background: rgba(10, 14, 39, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 3px solid #00ffff;
+            position: relative;
+            z-index: 100;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
+        }
+
+        .logo {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #ff0080, #ff4500);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 28px;
+            box-shadow: 0 0 25px rgba(255, 0, 128, 0.8);
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 12px;
+        }
+
+        .logo:hover {
+            transform: scale(1.15) rotate(8deg);
+            box-shadow: 0 0 40px rgba(255, 0, 128, 1), 0 0 60px rgba(255, 100, 0, 0.8);
+        }
+
+        .logo:active {
+            transform: scale(0.9);
+        }
+
+        .title {
+            flex: 1;
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            background: linear-gradient(90deg, #00ffff, #00ff88, #ffff00, #ff00ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+            letter-spacing: 3px;
+            animation: titleGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes titleGlow {
+            0%, 100% { filter: drop-shadow(0 0 10px rgba(0, 255, 255, 0.5)); }
+            50% { filter: drop-shadow(0 0 20px rgba(255, 0, 255, 0.8)); }
+        }
+
+        .hamburger {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 6px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .hamburger:hover {
+            transform: scale(1.2);
+        }
+
+        .hamburger span {
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, #00ffff, #ff00ff);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.6);
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(10px, 10px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
+        /* Sidebar Menu */
+        .sidebar {
+            position: fixed;
+            left: -300px;
+            top: 0;
+            width: 300px;
+            height: 100vh;
+            background: linear-gradient(180deg, rgba(10, 14, 39, 0.98), rgba(26, 26, 62, 0.98));
+            border-right: 3px solid #00ffff;
+            padding-top: 100px;
+            transition: left 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 99;
+            box-shadow: 0 0 50px rgba(0, 255, 255, 0.3), inset 0 0 30px rgba(0, 255, 255, 0.1);
+        }
+
+        .sidebar.active {
+            left: 0;
+        }
+
+        .menu-items {
+            list-style: none;
+        }
+
+        .menu-item {
+            padding: 20px 30px;
+            cursor: pointer;
+            position: relative;
+            border-left: 4px solid transparent;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .menu-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 4px;
+            height: 0;
+            background: linear-gradient(180deg, #00ffff, #ffff00);
+            transition: height 0.3s ease;
+        }
+
+        .menu-item:hover::before {
+            height: 100%;
+        }
+
+        .menu-item:hover {
+            background: rgba(0, 255, 255, 0.1);
+            padding-left: 40px;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+        }
+
+        .menu-item:active {
+            transform: scale(0.95);
+        }
+
+        .menu-item a {
+            color: #00ffff;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .menu-item:hover a {
+            color: #ffff00;
+            text-shadow: 0 0 15px rgba(255, 255, 0, 0.8);
+        }
+
+        .menu-icon {
+            font-size: 20px;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0);
+            z-index: 98;
+            transition: background 0.3s ease;
+            pointer-events: none;
+        }
+
+        .overlay.active {
+            background: rgba(0, 0, 0, 0.5);
+            pointer-events: auto;
+        }
+
+        /* Main Content */
+        main {
+            padding: 40px 30px;
+            min-height: calc(100vh - 200px);
+            position: relative;
+            z-index: 2;
+        }
+
+        .content-section {
+            display: none;
+            animation: slideIn 0.5s ease;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section-title {
+            color: #00ffff;
+            margin-bottom: 30px;
+            text-shadow: 0 0 20px rgba(0, 255, 255, 0.6);
+            font-size: 32px;
+            letter-spacing: 2px;
+            animation: titleFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes titleFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+        }
+
+        /* Card Styles */
+        .card {
+            background: rgba(0, 255, 255, 0.08);
+            border: 2px solid #00ffff;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent 30%, rgba(0, 255, 255, 0.1) 50%, transparent 70%);
+            transition: all 0.5s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: #ff00ff;
+            box-shadow: 0 0 40px rgba(255, 0, 255, 0.6), inset 0 0 20px rgba(255, 0, 255, 0.1);
+            background: rgba(255, 0, 255, 0.1);
+        }
+
+        .card:hover::before {
+            animation: shine 0.5s ease;
+        }
+
+        @keyframes shine {
+            from {
+                transform: translate(-100%, -100%) rotate(45deg);
+            }
+            to {
+                transform: translate(100%, 100%) rotate(45deg);
+            }
+        }
+
+        .card:active {
+            transform: scale(0.95);
+        }
+
+        .card h2 {
+            color: #00ffff;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.6);
+            font-size: 20px;
+        }
+
+        .card p {
+            color: #88ff00;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .card.completed {
+            border-color: #00ff88;
+            background: rgba(0, 255, 136, 0.1);
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.4);
+        }
+
+        .card.completed h2 {
+            color: #00ff88;
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.8);
+        }
+
+        .card.completed::after {
+            content: '✓ HOÀN THÀNH';
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: linear-gradient(135deg, #00ff88, #00ffff);
+            color: #000;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 12px;
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.6);
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(0, 255, 255, 0.2);
+            border-radius: 10px;
+            margin: 15px 0;
+            overflow: hidden;
+            border: 1px solid #00ffff;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00ffff, #00ff88, #ffff00);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.8);
+            animation: progressGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes progressGlow {
+            0%, 100% { box-shadow: 0 0 15px rgba(0, 255, 136, 0.8); }
+            50% { box-shadow: 0 0 25px rgba(255, 0, 255, 0.8); }
+        }
+
+        .button {
+            display: inline-block;
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #00ffff, #00ff88);
+            color: #000;
+            border: 2px solid #00ffff;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.5);
+            margin-top: 15px;
+            font-size: 14px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 25px rgba(0, 255, 136, 0.9), 0 0 40px rgba(0, 255, 255, 0.6);
+            background: linear-gradient(135deg, #00ff88, #00ffff);
+            border-color: #ff00ff;
+        }
+
+        .button:hover::before {
+            left: 100%;
+        }
+
+        .button:active {
+            transform: translateY(0);
+        }
+
+        .button.completed {
+            background: linear-gradient(135deg, #00ff88, #00ffff);
+            color: #000;
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.8);
+            pointer-events: none;
+        }
+
+        /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .stat-box {
+            background: rgba(0, 255, 255, 0.08);
+            border: 2px solid #00ffff;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
+        }
+
+        .stat-box:hover {
+            transform: translateY(-5px);
+            border-color: #ff00ff;
+            box-shadow: 0 0 25px rgba(255, 0, 255, 0.5);
+            background: rgba(255, 0, 255, 0.08);
+        }
+
+        .stat-number {
+            font-size: 32px;
+            font-weight: bold;
+            background: linear-gradient(90deg, #00ffff, #00ff88);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: numberPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes numberPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .stat-label {
+            color: #88ff00;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        /* Settings */
+        .setting-item {
+            background: rgba(0, 255, 255, 0.05);
+            border: 1px solid #00ffff;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .setting-item:hover {
+            background: rgba(0, 255, 255, 0.1);
+            border-color: #ff00ff;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+        }
+
+        .toggle-switch {
+            width: 50px;
+            height: 25px;
+            background: #333;
+            border: 2px solid #00ffff;
+            border-radius: 25px;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-switch.active {
+            background: linear-gradient(90deg, #00ffff, #00ff88);
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.6);
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            width: 21px;
+            height: 21px;
+            background: #fff;
+            border-radius: 50%;
+            top: 1px;
+            left: 1px;
+            transition: left 0.3s ease;
+        }
+
+        .toggle-switch.active::after {
+            left: 26px;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px 30px;
+            background: linear-gradient(135deg, #ff0080, #ff4500, #00ffff, #ff00ff);
+            border-top: 3px solid #ffff00;
+            color: #fff;
+            margin-top: 40px;
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 -10px 50px rgba(255, 0, 128, 0.5), inset 0 0 30px rgba(0, 255, 255, 0.2);
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #00ffff, #ff00ff, #ffff00, #00ffff);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.8);
+            animation: borderGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes borderGlow {
+            0%, 100% { box-shadow: 0 0 20px rgba(0, 255, 255, 0.8); }
+            50% { box-shadow: 0 0 40px rgba(255, 0, 255, 1); }
+        }
+
+        .footer-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-content p {
+            font-size: 18px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            text-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            margin: 10px 0;
+            animation: footerGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes footerGlow {
+            0%, 100% { filter: drop-shadow(0 0 10px rgba(255, 255, 0, 0.6)); }
+            50% { filter: drop-shadow(0 0 20px rgba(255, 0, 255, 0.8)); }
+        }
+
+        .team-logo {
+            width: 80px;
+            height: 80px;
+            margin: 15px auto;
+            background: linear-gradient(135deg, #00ffff, #ff00ff);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.8), 0 0 50px rgba(255, 0, 255, 0.6);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .title {
+                font-size: 20px;
+            }
+
+            main {
+                padding: 20px 15px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="logo">
+            <img src="https://i.ibb.co/Y7tRcBQV/IMG-20251128-210811.jpg" alt="VIETARION Logo" title="VIETARION">
+        </div>
+        <div class="title">VIETARION</div>
+        <div class="hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </header>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <ul class="menu-items">
+            <li class="menu-item" data-section="tasks">
+                <a href="#"><span class="menu-icon">✓</span>Nhiệm Vụ</a>
+            </li>
+            <li class="menu-item" data-section="guide">
+                <a href="#"><span class="menu-icon">📖</span>Hướng Dẫn</a>
+            </li>
+            <li class="menu-item" data-section="rewards">
+                <a href="#"><span class="menu-icon">🎁</span>Phần Thưởng</a>
+            </li>
+            <li class="menu-item" data-section="profile">
+                <a href="#"><span class="menu-icon">👤</span>Profile</a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Overlay -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Nhiệm Vụ -->
+        <section id="tasks" class="content-section active">
+            <h1 class="section-title">📋 Nhiệm Vụ Hàng Ngày</h1>
+            
+            <div style="margin: 30px 0;">
+                <h3 style="color: #00ffff; margin-bottom: 10px;">📊 Tiến Độ Hôm Nay</h3>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="taskProgress" style="width: 0%"></div>
+                </div>
+                <p style="color: #88ff00; font-size: 14px; margin-top: 5px;">Hoàn thành: <span id="taskCount">0</span>/3 nhiệm vụ</p>
+            </div>
+
+            <div class="card" data-task="1">
+                <h2>✨ Nhiệm Vụ 1: Khám Phá Ứng Dụng</h2>
+                <p>Hãy khám phá tất cả các tính năng của ứng dụng VIETARION</p>
+                <button class="button task-btn" onclick="completeTask(1)">🚀 Bắt Đầu</button>
+            </div>
+
+            <div class="card" data-task="2">
+                <h2>🎯 Nhiệm Vụ 2: Hoàn Thành 5 Nhiệm Vụ</h2>
+                <p>Hoàn thành 5 nhiệm vụ để mở khóa các phần thưởng đặc biệt</p>
+                <button class="button task-btn" onclick="completeTask(2)">⚡ Tiếp Tục</button>
+            </div>
+
+            <div class="card" data-task="3">
+                <h2>👥 Nhiệm Vụ 3: Chia Sẻ Với Bạn Bè</h2>
+                <p>Chia sẻ ứng dụng với 3 bạn bè để nhận thêm điểm thưởng</p>
+                <button class="button task-btn" onclick="completeTask(3)">💫 Chia Sẻ Ngay</button>
+            </div>
+        </section>
+
+        <!-- Hướng Dẫn -->
+        <section id="guide" class="content-section">
+            <h1 class="section-title">📖 Hướng Dẫn Sử Dụng</h1>
+
+            <div class="card">
+                <h2>🎮 Cách Sử Dụng Menu</h2>
+                <p>Nhấn vào biểu tượng ba gạch (☰) ở góc trên cùng bên phải để mở menu chính. Bạn có thể chọn:</p>
+                <ul style="margin-left: 20px; color: #88ff00; line-height: 2;">
+                    <li>✓ Nhiệm Vụ - Xem các nhiệm vụ hàng ngày</li>
+                    <li>📖 Hướng Dẫn - Tìm hiểu cách sử dụng</li>
+                    <li>🎁 Phần Thưởng - Kiểm tra điểm và huy hiệu</li>
+                    <li>👤 Profile - Quản lý tài khoản của bạn</li>
+                </ul>
+                <button class="button">📚 Xem Chi Tiết</button>
+            </div>
+
+            <div class="card">
+                <h2>🎨 Tương Tác Với Nội Dung</h2>
+                <p>Tất cả các thẻ nội dung (card) đều có các hiệu ứng tương tác:</p>
+                <ul style="margin-left: 20px; color: #88ff00; line-height: 2;">
+                    <li>🔸 Hover - Di chuột lên card để xem hiệu ứng</li>
+                    <li>🔹 Click - Nhấn vào để tương tác</li>
+                    <li>📱 Swipe - Vuốt từ cạnh trái để mở/đóng menu (di động)</li>
+                </ul>
+                <button class="button">🎓 Học Thêm</button>
+            </div>
+
+            <div class="card">
+                <h2>⚙️ Cài Đặt & Tùy Chỉnh</h2>
+                <p>Truy cập phần Profile để:</p>
+                <ul style="margin-left: 20px; color: #88ff00; line-height: 2;">
+                    <li>👤 Chỉnh sửa thông tin cá nhân</li>
+                    <li>🔐 Cập nhật mật khẩu và bảo mật</li>
+                    <li>⚙️ Tùy chỉnh các cài đặt khác</li>
+                </ul>
+                <button class="button">🔧 Đi Đến Settings</button>
+            </div>
+        </section>
+
+        <!-- Phần Thưởng -->
+        <section id="rewards" class="content-section">
+            <h1 class="section-title">🎁 Phần Thưởng & Điểm</h1>
+
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-number" id="pointsDisplay">1,250</div>
+                    <div class="stat-label">💎 Tổng Điểm</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">42</div>
+                    <div class="stat-label">✅ Nhiệm Vụ Hoàn Thành</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">15</div>
+                    <div class="stat-label">⭐ Level Hiện Tại</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>💰 Điểm Thưởng Hiện Tại: 1,250 ⭐</h2>
+                <p>Bạn đã tích lũy được 1,250 điểm. Tiếp tục hoàn thành nhiệm vụ để kiếm thêm!</p>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 75%;"></div>
+                </div>
+                <p style="color: #88ff00; font-size: 12px;">Cần 250 điểm nữa để đạt level 16</p>
+                <button class="button">🏪 Xem Kho Quà Tặng</button>
+            </div>
+
+            <div class="card">
+                <h2>🏆 Huy Hiệu Đã Mở Khóa</h2>
+                <p style="font-size: 28px; line-height: 2;">
+                    🥇 Người Khởi Đầu | 
+                    🌟 Sao Sáng | 
+                    💎 Bảo Vật | 
+                    🔥 Nhà Cung Cấp | 
+                    🚀 Tân Binh
+                </p>
+                <button class="button">🎖️ Xem Tất Cả Huy Hiệu</button>
+            </div>
+
+            <div class="card">
+                <h2>👑 Gói Cao Cấp - Premium</h2>
+                <p>Nâng cấp lên Premium để mở khóa:</p>
+                <ul style="margin-left: 20px; color: #88ff00; line-height: 2;">
+                    <li>✨ Tính năng độc quyền</li>
+                    <li>🎁 500 Bonus Points</li>
+                    <li>🔓 Mở khóa tất cả nội dung</li>
+                    <li>🚀 Ưu tiên hỗ trợ 24/7</li>
+                </ul>
+                <button class="button" onclick="upgradePremium()">💳 Nâng Cấp Ngay</button>
+            </div>
+        </section>
+
+        <!-- Profile -->
+        <section id="profile" class="content-section">
+            <h1 class="section-title">👤 Profile Cá Nhân</h1>
+
+            <div class="card">
+                <h2>ℹ️ Thông Tin Cá Nhân</h2>
+                <p style="margin: 15px 0;">
+                    <strong style="color: #00ffff;">👤 Tên Tài Khoản:</strong> <span style="color: #88ff00;">NickenDoKiller</span><br>
+                    <strong style="color: #00ffff;">📊 Level:</strong> <span style="color: #88ff00;">15</span><br>
+                    <strong style="color: #00ffff;">📅 Tham Gia:</strong> <span style="color: #88ff00;">28/11/2025</span><br>
+                    <strong style="color: #00ffff;">🌟 Trạng Thái:</strong> <span style="color: #00ff88;">🟢 Đang Hoạt Động</span>
+                </p>
+                <button class="button" onclick="editProfile()">✏️ Chỉnh Sửa Thông Tin</button>
+            </div>
+
+            <div class="card">
+                <h2>📈 Thống Kê Hoạt Động</h2>
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-number">42</div>
+                        <div class="stat-label">Nhiệm Vụ Hoàn Thành</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">1,250</div>
+                        <div class="stat-label">Tổng Điểm Tích Lũy</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">128</div>
+                        <div class="stat-label">Bạn Bè</div>
+                    </div>
+                </div>
+                <button class="button" onclick="showStats()">📊 Xem Chi Tiết Thống Kê</button>
+            </div>
+
+            <div class="card">
+                <h2>⚙️ Cài Đặt Tài Khoản</h2>
+                
+                <div class="setting-item">
+                    <span style="color: #00ffff;"><strong>🔔 Thông Báo</strong></span>
+                    <div class="toggle-switch active" onclick="toggleNotification(this)"></div>
+                </div>
+
+                <div class="setting-item">
+                    <span style="color: #00ffff;"><strong>🎵 Âm Thanh</strong></span>
+                    <div class="toggle-switch active" onclick="toggleSound(this)"></div>
+                </div>
+
+                <div class="setting-item">
+                    <span style="color: #00ffff;"><strong>🌙 Chế Độ Tối</strong></span>
+                    <div class="toggle-switch active" onclick="toggleDarkMode(this)"></div>
+                </div>
+
+                <div class="setting-item">
+                    <span style="color: #00ffff;"><strong>🔐 Bảo Mật 2 Yếu Tố</strong></span>
+                    <div class="toggle-switch" onclick="toggleTwoFA(this)"></div>
+                </div>
+
+                <button class="button" onclick="changePassword()">🔐 Đổi Mật Khẩu</button>
+                <button class="button" style="background: linear-gradient(135deg, #ff4500, #ff0080); border-color: #ff0080; margin-left: 10px;" onclick="logout()">🚪 Đăng Xuất</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="team-logo">🎯</div>
+            <p>🌟 VIETARION OFFICIAL 🌟</p>
+            <p>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</p>
+            <p>© 2025 Bản Quyền Thuộc Team VIETARION</p>
+            <p>All Rights Reserved | No ©opy ®ight ™</p>
+            <p>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</p>
+            <p style="font-size: 14px; margin-top: 15px;">📧 Contact: vietarion@team.com | 📱 Support: 24/7</p>
+        </div>
+    </footer>
+
+    <script>
+        // Menu Toggle
+        const hamburger = document.getElementById('hamburger');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+        const menuItems = document.querySelectorAll('.menu-item');
+
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        });
+
+        overlay.addEventListener('click', () => {
+            hamburger.classList.remove('active');
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+        });
+
+        // Menu Navigation
+        menuItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                const sectionId = item.dataset.section;
+                
+                document.querySelectorAll('.content-section').forEach(section => {
+                    section.classList.remove('active');
+                });
+
+                document.getElementById(sectionId).classList.add('active');
+
+                hamburger.classList.remove('active');
+                sidebar.classList.remove('active');
+                overlay.classList.remove('active');
+
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+
+        // Task Completion
+        let completedTasks = 0;
+
+        function completeTask(taskNum) {
+            const card = document.querySelector(`[data-task="${taskNum}"]`);
+            const btn = card.querySelector('.task-btn');
+            
+            if (!card.classList.contains('completed')) {
+                card.classList.add('completed');
+                btn.classList.add('completed');
+                btn.textContent = '✅ HOÀN THÀNH';
+                btn.disabled = true;
+                completedTasks++;
+                updateProgress();
+                showNotification(`🎉 Bạn đã hoàn thành nhiệm vụ ${taskNum}!`);
+            }
+        }
+
+        function updateProgress() {
+            const progress = (completedTasks / 3) * 100;
+            document.getElementById('taskProgress').style.width = progress + '%';
+            document.getElementById('taskCount').textContent = completedTasks;
+            
+            if (completedTasks === 3) {
+                showNotification('🌟 Chúc mừng! Bạn đã hoàn thành tất cả nhiệm vụ hôm nay!');
+            }
+        }
+
+        // Settings Functions
+        function toggleNotification(element) {
+            element.classList.toggle('active');
+            showNotification(element.classList.contains('active') ? '✅ Thông báo được bật' : '❌ Thông báo bị tắt');
+        }
+
+        function toggleSound(element) {
+            element.classList.toggle('active');
+            showNotification(element.classList.contains('active') ? '🔊 Âm thanh được bật' : '🔇 Âm thanh bị tắt');
+        }
+
+        function toggleDarkMode(element) {
+            element.classList.toggle('active');
+            showNotification('🌙 Chế độ tối: ' + (element.classList.contains('active') ? 'BẬT' : 'TẮT'));
+        }
+
+        function toggleTwoFA(element) {
+            element.classList.toggle('active');
+            showNotification('🔐 Xác thực 2 yếu tố: ' + (element.classList.contains('active') ? 'BẬT' : 'TẮT'));
+        }
+
+        function changePassword() {
+            showNotification('🔐 Vui lòng xác nhận mật khẩu cũ để đổi mật khẩu mới');
+        }
+
+        function logout() {
+            showNotification('👋 Đăng xuất thành công. Hẹn gặp lại bạn!');
+            setTimeout(() => {
+                alert('Redirect to login page...');
+            }, 1500);
+        }
+
+        function editProfile() {
+            showNotification('✏️ Bạn đang ở chế độ chỉnh sửa thông tin cá nhân');
+        }
+
+        function showStats() {
+            showNotification('📊 Đang tải chi tiết thống kê...');
+        }
+
+        function upgradePremium() {
+            showNotification('💳 Đang mở cổng thanh toán... Tính năng demo!');
+        }
+
+        // Notification System
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 80px;
+                right: 20px;
+                background: linear-gradient(135deg, #00ffff, #00ff88);
+                color: #000;
+                padding: 15px 25px;
+                border-radius: 10px;
+                box-shadow: 0 0 30px rgba(0, 255, 136, 0.8);
+                font-weight: bold;
+                z-index: 1000;
+                animation: slideDown 0.4s ease;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.style.animation = 'slideUp 0.4s ease';
+                setTimeout(() => notification.remove(), 400);
+            }, 2500);
+        }
+
+        // Add Animation Styles
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideDown {
+                from { transform: translateY(-100px); opacity: 0; }
+                to { transform: translateY(0); opacity: 1; }
+            }
+            @keyframes slideUp {
+                from { transform: translateY(0); opacity: 1; }
+                to { transform: translateY(-100px); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Swipe Detection
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', e => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            if (touchStartX - touchEndX > 50) {
+                sidebar.classList.remove('active');
+                hamburger.classList.remove('active');
+                overlay.classList.remove('active');
+            } else if (touchEndX - touchStartX > 50) {
+                sidebar.classList.add('active');
+                hamburger.classList.add('active');
+                overlay.classList.add('active');
+            }
+        }
+
+        // Initial Notification
+        window.addEventListener('load', () => {
+            showNotification('👋 Chào mừng bạn đến với VIETARION!');
+        });
+    </script>
+</body>
+</html>
